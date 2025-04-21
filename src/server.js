@@ -2,19 +2,25 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import viewEngine from './config/viewEngine.js';
 import initWebRoutes from './route/web.js';
-require('dotenv').config(); // Load environment variables from .env file
-const app = express(); // Create an Express application
+import db from './models/index.js'; // ✅ Load Sequelize và models
+import dotenv from 'dotenv';
 
-app.use(bodyParser.json()); // Parse JSON request bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request bodies
+dotenv.config();
 
+const app = express();
 
-viewEngine(app); // Set up the view engine
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+viewEngine(app);
 initWebRoutes(app);
-const PORT = process.env.PORT || 8080; // Set the port to listen on
 
+// ✅ Kết nối DB từ models/index.js
+db.sequelize.authenticate()
+    .then(() => console.log('✅ DB connected'))
+    .catch(err => console.error('❌ DB connection failed:', err));
 
-app.listen(PORT, () => { // Start the server
-    console.log(`Server is running on localhost:${PORT}`); // Log the server start message
-})
-
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`🚀 Server is running at http://localhost:${PORT}`);
+});
