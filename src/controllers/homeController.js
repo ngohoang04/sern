@@ -75,9 +75,6 @@ let deleteCRUD = async (req, res) => {
         // Xóa người dùng bằng cách gọi service
         await userService.deleteUserById(userId);
 
-        // Sau khi xóa thành công, lấy danh sách tất cả người dùng
-        let allUsers = await db.User.findAll();
-
         // Render lại trang với dữ liệu người dùng
         return res.redirect('/');
     } catch (error) {
