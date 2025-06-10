@@ -1,17 +1,20 @@
 import db from "../models/index";
-
+import CRUDService from "../services/CRUDService";
 let getHomePage = async (req, res) => {
-    try {
+    await CRUDService.getAllUsers();
+}
 
-        let data = await db.User.findAll();
-        return res.render('home.ejs', { data: JSON.stringify(data) });
-    } catch (error) {
-        console.error("Error fetching home page:", error);
-        return res.status(500).send("Internal Server Error");
-    }
+let getCrudPage = (req, res) => {
+    return res.render('crud.ejs');
+}
+let postCRUD = async (req, res) => {
+    await CRUDService.createNewUser(req.body);
+    console.log(message);
+    return res.send('Post CRUD from server');
 }
 
 module.exports = {
-    getHomePage
-    // Add more controller functions as needed
+    getHomePage,
+    getCrudPage,
+    postCRUD
 };
